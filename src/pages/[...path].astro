@@ -1,0 +1,16 @@
+---
+import { loadBuildData, publicPageEntries } from '../../scripts/build-context.mjs';
+import { renderRoute } from '../lib/render-route.mjs';
+
+export function getStaticPaths() {
+  const data = loadBuildData();
+  return publicPageEntries(data).map(entry => ({
+    params: { path: entry.path },
+    props: { entry },
+  }));
+}
+
+const data = loadBuildData();
+const html = renderRoute(Astro.props.entry, data);
+---
+<Fragment set:html={html} />

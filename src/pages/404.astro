@@ -1,0 +1,8 @@
+---
+import { loadBuildData } from '../../scripts/build-context.mjs';
+import { renderRoute } from '../lib/render-route.mjs';
+
+const data = loadBuildData();
+const html = renderRoute({ site: data.sites[0], type: '404' }, data);
+---
+<Fragment set:html={html} />
