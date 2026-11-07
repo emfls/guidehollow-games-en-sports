@@ -7,6 +7,10 @@
   const { copy, siteId, games = [] } = config;
   const $ = (selector, parent = document) => parent.querySelector(selector);
   const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
+  const genreMenu = $('[data-genre-menu]');
+  document.addEventListener('pointerdown', event => {
+    if (genreMenu?.open && !genreMenu.contains(event.target)) genreMenu.open = false;
+  });
   const format = (value, fields = {}) => String(value).replace(/\{(\w+)\}/g, (_, name) => fields[name] ?? `{${name}}`);
   const ids = new Set(games.map(game => game.id));
   const key = type => `guidehollow:${siteId}:${type}`;
@@ -198,6 +202,11 @@
     fullscreenButton.setAttribute('aria-label',label); fullscreenButton.title = label;
   });
   document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && genreMenu?.open) {
+      genreMenu.open = false;
+      $('summary', genreMenu)?.focus();
+      return;
+    }
     if (event.key === 'Escape' && frame && !document.fullscreenElement) closeGame();
   });
   addEventListener('pagehide', () => closeGame({focus:false}));
